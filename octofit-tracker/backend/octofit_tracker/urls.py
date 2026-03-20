@@ -15,8 +15,9 @@ Including another URLconf
 """
 import os
 from django.contrib import admin
+
 from django.urls import path, include
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 
 def api_root(request):
     codespace_name = os.environ.get('CODESPACE_NAME', 'localhost')
@@ -29,7 +30,11 @@ def api_root(request):
         'workouts': f'{base_url}/api/workouts/',
     })
 
+def root_redirect(request):
+    return HttpResponseRedirect('/api/')
+
 urlpatterns = [
+    path('', root_redirect),
     path('admin/', admin.site.urls),
     path('api/', api_root, name='api-root'),
 ]
